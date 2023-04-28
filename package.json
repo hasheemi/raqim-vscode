@@ -1,0 +1,118 @@
+{
+  "name": "raqim",
+  "displayName": "raqim",
+  "description": "remainder adzan quran imsakiyah manaqib",
+  "publisher": "hasheemidev",
+  "version": "1.0.1",
+  "keywords": [
+    "quran",
+    "adzan",
+    "azan",
+    "murotal",
+    "islam",
+    "muslim",
+    "reminder",
+    "indonesia"
+  ],
+  "icon": "media/raqim.png",
+  "engines": {
+    "vscode": "^1.60.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:raqim.main.focus",
+    "onView:raqim.main",
+    "*"
+  ],
+  "main": "./extension.js",
+  "contributes": {
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "custom-activitybar",
+          "title": "Raqim main",
+          "icon": "media/muslim.svg"
+        }
+      ]
+    },
+    "views": {
+      "custom-activitybar": [
+        {
+          "type": "webview",
+          "id": "raqim.main",
+          "name": "Raqim"
+        }
+      ]
+    },
+    "commands": [
+      {
+        "command": "raqim.main.focus",
+        "category": "Raqim",
+        "title": "raqim sidebar",
+        "icon": "$(clear-all)"
+      },
+      {
+        "command": "raqim.stopAdzan",
+        "title": "stop adzan",
+        "category": "raqim"
+      },
+      {
+        "command": "raqim.pause",
+        "title": "pause audio",
+        "category": "raqim"
+      },
+      {
+        "command": "raqim.resume",
+        "title": "resume audio",
+        "category": "raqim"
+      },
+      {
+        "command": "raqim.next",
+        "title": "go to next audio",
+        "category": "raqim"
+      },
+      {
+        "command": "raqim.prev",
+        "title": "go to previous audio",
+        "category": "raqim"
+      }
+    ],
+    "configuration": {
+      "title": "Raqim",
+      "properties": {
+        "raqim.city": {
+          "default": "surabaya",
+          "type": "string",
+          "description": "enter your city name"
+        },
+        "raqim.country": {
+          "default": "indonesia",
+          "type": "string",
+          "description": "enter your country name"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "pretest": "npm run lint",
+    "test": "node ./test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.1.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.60.0",
+    "@vscode/test-electron": "^2.2.3",
+    "eslint": "^8.34.0",
+    "glob": "^8.1.0",
+    "mocha": "^10.2.0",
+    "typescript": "^4.9.5"
+  },
+  "dependencies": {
+    "axios": "^1.3.4",
+    "play-sound": "^1.1.5"
+  }
+}
