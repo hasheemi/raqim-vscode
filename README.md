@@ -20,7 +20,7 @@ To play the audio through the terminal using Node.js, you must have an audio pla
 
 The extension provides a schedule of prayer times for the current day (Fajr, Dhuhr, Asr, Maghrib, Isya). Users can see the exact time for each prayer and plan their work around it.
 
-![raqim guide](./media/guide.png)
+![raqim guide](https://raw.githubusercontent.com/hasheemi/raqim-vscode/main/media/guide.png)
 
 ## Conclusion
 

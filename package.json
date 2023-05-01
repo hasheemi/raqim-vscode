@@ -3,7 +3,7 @@
   "displayName": "raqim",
   "description": "remainder adzan quran imsakiyah manaqib",
   "publisher": "hasheemidev",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "keywords": [
     "quran",
     "adzan",
@@ -15,6 +15,10 @@
     "indonesia"
   ],
   "icon": "media/raqim.png",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hasheemi/raqim-vscode.git"
+  },
   "engines": {
     "vscode": "^1.60.0"
   },
@@ -77,6 +81,11 @@
         "command": "raqim.prev",
         "title": "go to previous audio",
         "category": "raqim"
+      },
+      {
+        "command": "raqim.test",
+        "title": "testing device before play",
+        "category": "raqim"
       }
     ],
     "configuration": {
@@ -114,5 +123,11 @@
   "dependencies": {
     "axios": "^1.3.4",
     "play-sound": "^1.1.5"
+  },
+  "__metadata": {
+    "id": "d6f3eaa2-1b5d-4e01-928a-1f9845b928a6",
+    "publisherDisplayName": "hasheemidev",
+    "publisherId": "2683fc5b-a4f2-4aee-90fb-483ac36ba6ed",
+    "isPreReleaseVersion": false
   }
 }

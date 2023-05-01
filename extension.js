@@ -3,6 +3,8 @@
 // Import the module and reference it with the alias vscode in your code below
 const vscode = require("vscode");
 const player = require("play-sound")();
+const findExec = require("find-exec");
+const os = require("os");
 
 const { adzanPopup, stopAdzan } = require("./util/adzanPopup");
 const { prevBtn, playBtn, nextBtn } = require("./util/raqimControl");
@@ -10,7 +12,21 @@ const { svgDown } = require("./util/svgIcon");
 const { getWaktu } = require("./util/adzanTime");
 const playlist = require("./util/player.json");
 const soundPrepare = require("./util/soundPrepare");
-
+let checkPath = (path) => {
+  let myos = os.platform();
+  if (myos == "win32") return path.substring(1);
+  else return path;
+};
+let listCli = [
+  "mplayer",
+  "afplay",
+  "mpg123",
+  "mpg321",
+  "play",
+  "omxplayer",
+  "aplay",
+  "cmdmp3",
+];
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 
@@ -29,11 +45,12 @@ async function activate(context) {
   let waktuSholat = await getWaktu(config.get("city"), config.get("country"));
   let view = undefined;
   let type;
-  let adzanPath = vscode.Uri.joinPath(
+  let adzanPathr = vscode.Uri.joinPath(
     context.extensionUri,
     "media",
     "adzan.mp3"
   ).path;
+  let adzanPath = checkPath(adzanPathr);
   class raqimSidebar {
     constructor(extensionUri) {
       this._extensionUri = extensionUri;
@@ -65,11 +82,9 @@ async function activate(context) {
                 "sound",
                 filename
               ).path;
-              sound = player.play(soundPath, function (e) {
+              sound = player.play(checkPath(soundPath), function (e) {
                 if (e) {
-                  vscode.window.showErrorMessage("gak iso");
-                } else {
-                  console.log("lp masbro");
+                  vscode.window.showErrorMessage(e);
                 }
               });
               return;
@@ -211,6 +226,14 @@ async function activate(context) {
       id: parseInt(soundId) - 1,
     });
   });
+  let testDis = vscode.commands.registerCommand("raqim.test", function () {
+    vscode.window.showInformationMessage(
+      `raqim is running on ${os.platform()}`
+    );
+    vscode.window.showInformationMessage(
+      `you have ${findExec(listCli)} player`
+    );
+  });
 
   vscode.window.onDidCloseTerminal((e) => {
     sound.kill();
@@ -226,6 +249,7 @@ async function activate(context) {
   context.subscriptions.push(pauseDis);
   context.subscriptions.push(nextDis);
   context.subscriptions.push(prevDis);
+  context.subscriptions.push(testDis);
 }
 
 function deactivate() {}
