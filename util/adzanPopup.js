@@ -2,6 +2,7 @@ const vscode = require("vscode");
 const player = require("play-sound")();
 const { getbq } = require("./adzanTime");
 let adzan;
+let adzanPid;
 
 function adzanPopup(path, waktuSholat) {
   delete waktuSholat.dhuha;
@@ -27,6 +28,7 @@ function adzanPopup(path, waktuSholat) {
         isAdzan = false;
       }
     });
+    adzanPid = adzan.pid;
   } else if (sholatVal.includes(dwaktuq)) {
     vscode.window.showInformationMessage(
       `10 more minutes time for ${namaSholat(dwaktuq)} prayer`
@@ -37,4 +39,4 @@ function adzanPopup(path, waktuSholat) {
 function stopAdzan() {
   adzan.kill();
 }
-module.exports = { adzanPopup, stopAdzan };
+module.exports = { adzanPopup, stopAdzan, adzanPid };

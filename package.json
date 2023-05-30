@@ -3,7 +3,7 @@
   "displayName": "raqim",
   "description": "remainder adzan quran imsakiyah manaqib",
   "publisher": "hasheemidev",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "keywords": [
     "quran",
     "adzan",
@@ -60,6 +60,11 @@
       {
         "command": "raqim.stopAdzan",
         "title": "stop adzan",
+        "category": "raqim"
+      },
+      {
+        "command": "raqim.stopSound",
+        "title": "stop audio",
         "category": "raqim"
       },
       {

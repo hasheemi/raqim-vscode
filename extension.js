@@ -5,15 +5,17 @@ const vscode = require("vscode");
 const player = require("play-sound")();
 const findExec = require("find-exec");
 const os = require("os");
+const { exec } = require("child_process");
 
-const { adzanPopup, stopAdzan } = require("./util/adzanPopup");
-const { prevBtn, playBtn, nextBtn } = require("./util/raqimControl");
+const { adzanPopup, stopAdzan, adzanPid } = require("./util/adzanPopup");
+const { prevBtn, playBtn, nextBtn, stopBtn } = require("./util/raqimControl");
 const { svgDown } = require("./util/svgIcon");
 const { getWaktu } = require("./util/adzanTime");
 const playlist = require("./util/player.json");
 const soundPrepare = require("./util/soundPrepare");
+
+let myos = os.platform();
 let checkPath = (path) => {
-  let myos = os.platform();
   if (myos == "win32") return path.substring(1);
   else return path;
 };
@@ -36,12 +38,20 @@ let listCli = [
 async function activate(context) {
   //import
   console.log("ahlan wa sahlan fi vscode :v");
+  let killSound = (pid) => {
+    if (pid == 0) vscode.showErrorMessage("failed to kill");
+    else {
+      if (myos == "win32") exec(`taskkill /PID ${pid} /F /T`);
+      else sound.kill();
+    }
+  };
   let config = vscode.workspace.getConfiguration("raqim");
   let sound;
   let adzan;
   let isPlay = false;
   let isAdzan = false;
   let soundId = 0;
+  let soundPid = 0;
   let waktuSholat = await getWaktu(config.get("city"), config.get("country"));
   let view = undefined;
   let type;
@@ -68,12 +78,12 @@ async function activate(context) {
               let filename = message.judul + ".mp3";
               soundId = message.id;
               type = message.type;
-              isPlay == true ? sound.kill() : "";
+              isPlay == true ? killSound(soundPid) : "";
               soundPrepare(message.type, message.judul);
               playBtn.text = "$(debug-pause)";
               playBtn.command = "raqim.pause";
               prevBtn.show();
-              playBtn.show();
+              myos == "win32" ? stopBtn.show() : playBtn.show();
               nextBtn.show();
               isPlay = true;
               let soundPath = vscode.Uri.joinPath(
@@ -87,6 +97,7 @@ async function activate(context) {
                   vscode.window.showErrorMessage(e);
                 }
               });
+              soundPid = sound.pid;
               return;
           }
         },
@@ -195,23 +206,40 @@ async function activate(context) {
     vscode.window.registerWebviewViewProvider("raqim.main", sidebarProvider)
   );
 
-  let stopDis = vscode.commands.registerCommand("raqim.stopAdzan", function () {
-    stopAdzan();
+  let adzanDis = vscode.commands.registerCommand(
+    "raqim.stopAdzan",
+    function () {
+      myos == "win32" ? exec(`taskkill /PID ${adzanPid} /F /T`) : stopAdzan();
+    }
+  );
+  let stopDis = vscode.commands.registerCommand("raqim.stopSound", function () {
+    isPlay = false;
+    killSound(soundPid);
   });
   let resumeDis = vscode.commands.registerCommand("raqim.resume", function () {
     if (isPlay == "pause") {
-      sound.kill("SIGCONT");
-      isPlay = true;
-      playBtn.text = "$(debug-pause)";
-      playBtn.command = "raqim.pause";
+      if (myos !== "win32") {
+        sound.kill("SIGCONT");
+        isPlay = true;
+        playBtn.text = "$(debug-pause)";
+        playBtn.command = "raqim.pause";
+      } else
+        vscode.showErrorMessage(
+          "sorry Raqim doesnt support pause and resume in Windows"
+        );
     }
   });
   let pauseDis = vscode.commands.registerCommand("raqim.pause", function () {
     if (isPlay == true) {
-      sound.kill("SIGSTOP");
-      isPlay = "pause";
-      playBtn.text = "$(play)";
-      playBtn.command = "raqim.resume";
+      if (myos !== "win32") {
+        sound.kill("SIGSTOP");
+        isPlay = "pause";
+        playBtn.text = "$(play)";
+        playBtn.command = "raqim.resume";
+      } else
+        vscode.showErrorMessage(
+          "sorry Raqim doesnt support pause and resume in Windows"
+        );
     }
   });
   let nextDis = vscode.commands.registerCommand("raqim.next", function () {
@@ -227,9 +255,7 @@ async function activate(context) {
     });
   });
   let testDis = vscode.commands.registerCommand("raqim.test", function () {
-    vscode.window.showInformationMessage(
-      `raqim is running on ${os.platform()}`
-    );
+    vscode.window.showInformationMessage(`raqim is running on ${myos}`);
     vscode.window.showInformationMessage(
       `you have ${findExec(listCli)} player`
     );
@@ -244,12 +270,15 @@ async function activate(context) {
   setInterval(() => {
     adzanPopup(adzanPath, waktuSholat);
   }, 1000 * 60);
+  context.subscriptions.push(adzanDis);
   context.subscriptions.push(stopDis);
-  context.subscriptions.push(resumeDis);
-  context.subscriptions.push(pauseDis);
   context.subscriptions.push(nextDis);
   context.subscriptions.push(prevDis);
   context.subscriptions.push(testDis);
+  if (myos !== "win32") {
+    context.subscriptions.push(resumeDis);
+    context.subscriptions.push(pauseDis);
+  }
 }
 
 function deactivate() {}

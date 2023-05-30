@@ -98,7 +98,7 @@ textarea::placeholder {
 h3 {
   text-align: center;
   font-size: var(--vscode-font-size);
-  text-transform: lowercase;
+  text-transform: capitalize;
 }
 #jadwal #waktu {
   font-size: var(--vscode-font-size);
