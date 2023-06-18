@@ -4,6 +4,12 @@
 
 This is a Visual Studio Code extension that provides Muslim programmers with useful features to help them remember their daily prayers and stay connected with their faith while working on their projects. The extension includes the following features:
 
+To play the audio through the terminal using Node.js, you must have an audio player installed on your system, such as mplayer, afplay, mpg123, mpg321, play, omxplayer, aplay, cmdmp3, cvlc, powershell.
+
+**We recommend to install mpg123 you can install it using apt,brew or chocolatey in windows**
+
+The audio files can be accessed in the folder path `${vscode-patn}/${raqim-ext}/media/sound` and are available in MP3 format.
+
 ## Features
 
 ### Prayer Reminder
@@ -13,8 +19,6 @@ The extension provides a prayer reminder feature that reminds users of the five 
 ### Audio Quran and Manaqib
 
 The extension also includes a feature that allows users to listen to the Quran recitation and manaqib (Islamic poems) while working. Users can choose from a selection of reciters and poems and listen to them without having to leave their editor. The audio Quran recitation is by H. Muammar Zainal Asyikin from Indonesia, and the manaqib is from Syekh Abdul Qodir Al Jaelani Majlis Alkhidmah Surabaya.
-
-To play the audio through the terminal using Node.js, you must have an audio player installed on your system, such as mplayer, afplay, mpg123, mpg321, play, omxplayer, aplay, cmdmp3, cvlc, powershell. The audio files can be accessed in the folder path `${vscode-patn}/${raqim-ext}/media/sound` and are available in MP3 format.
 
 ### Prayer Times Schedule
 
@@ -35,3 +39,5 @@ To change the city and country name settings in the VSCode Islamic Extension, us
 - 1.0.0 (initial version)
 
 _made in indonesia_
+
+_presented by ukhsafi copler community gresik_

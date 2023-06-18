@@ -275,10 +275,8 @@ async function activate(context) {
   context.subscriptions.push(nextDis);
   context.subscriptions.push(prevDis);
   context.subscriptions.push(testDis);
-  if (myos !== "win32") {
-    context.subscriptions.push(resumeDis);
-    context.subscriptions.push(pauseDis);
-  }
+  context.subscriptions.push(resumeDis);
+  context.subscriptions.push(pauseDis);
 }
 
 function deactivate() {}
